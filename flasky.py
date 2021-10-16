@@ -9,5 +9,5 @@ def index():
 
 @app.route("/camera")
 def cam():
-    with open("static/cam.html") as x:
+    with open("static/mic.html") as x:
         return x.read()

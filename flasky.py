@@ -7,7 +7,7 @@ app = Flask(__name__)
 def index():
     return "<p>Main page</p>"
 
-@app.route("/camera")
+@app.route("/mic")
 def cam():
     with open("static/mic.html") as x:
         return x.read()

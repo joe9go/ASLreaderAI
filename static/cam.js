@@ -1,13 +1,10 @@
 var constr = {
-  video: {
-    width: 1280,
-    height: 720,
-  }
+  audio: true
 }
 async function doThing(){
-  const cam = await navigator.mediaDevices.getUserMedia(constr)
+  const mic = await navigator.mediaDevices.getUserMedia(constr)
   const video = document.querySelector('video');
-  video.srcObject = cam;
+  video.srcObject = mic;
   video.play();
 }
 

@@ -63,7 +63,9 @@ function updateEmbeds(){
   inner = "";
   arr = message.textContent.split(" ");
   for(const element of arr){
-    inner = inner+base+getVideoUrl(element)+" title=\"" + element +"\"></video></div>"
+    inner = base+getVideoUrl(element)+" title=\"" + element +"\"></video></div>";
+    ASLVideo.insertAdjacentHTML('afterend',inner)
+    //x.outerHTML.replace(/src=.*mp4\"/,"src=\""+getVideoUrl(element));
   }
   ASLVideo.innerHTML = inner;
 }

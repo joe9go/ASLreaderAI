@@ -70,11 +70,10 @@ async function addEmotion(){
     'body': raw,
     'redirect': 'follow'
   };
-  emo = await fetch("https://asl-emotion-ai-api.herokuapp.com/predict", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
-  message.textContent = message.textContent +" || Emotion detected: "+emo;
+  emo = await fetch("https://asl-emotion-ai-api.herokuapp.com/predict", requestOptions);
+  emo = await emo.text();
+  em = emo.substring(emo.indexOf(":\""),emo.indexOf("\"}")).substring(2);
+  message.textContent = message.textContent +" || Emotion detected: "+em;
 }
 
 function updateEmbeds(){

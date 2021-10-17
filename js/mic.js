@@ -1,10 +1,12 @@
+//variable declaration
 var audioChunks = [];
 var mediaRecorder;
 var mic;
 var textFin;
 var txt;
 
-var constrA = {
+//good functions for organization
+const constrA = {
   audio: true
 }
 var audio;
@@ -17,15 +19,18 @@ async function startRec(){
     audioChunks.push(event.data);
   });
   mediaRecorder.start();
-  status.textContent = "Status: Collecting voice data";
+  onRecording();
 }
 async function stopRec(){
   mediaRecorder.stop();
-  status.textContent = "Status: Preparing voice data";
+  mediaRecorder = null;
+  onStopRecording();
   setTimeout(async function(){
     message.textContent = await assemblyText();
   },1500)
 }
+
+//api fuckery, very bad for organization but good enough overall
 async function assemblyText(){
   var bod;
   bod = await audioChunks["at"](-1).arrayBuffer();
@@ -48,9 +53,23 @@ async function assemblyText(){
      textFin = await fetch(endpoint, {'method':'GET', "headers":headers});
      textFin = await textFin.json();
   }
-  status.textContent = "Status: Complete";
+  onSTTComplete();
   return textFin["text"];
 }
+
+
+// A trio of functions. I reccomend you put whatever dynamic UI things you want in these
+function onRecording(){ //activates alongside
+  status.textContent = "Status: Collecting voice data";
+}
+function onStopRecording(){
+  status.textContent = "Status: Preparing voice data";
+}
+function onSTTComplete(){
+  status.textContent = "Status: Complete";
+}
+
+
 const startButt = document.getElementById("startButton");
 const stopButt = document.getElementById("stopButton");
 const message = document.getElementById("message");

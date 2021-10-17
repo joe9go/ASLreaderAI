@@ -26,7 +26,7 @@ async function stopRec(){
   mediaRecorder = null;
   onStopRecording();
   setTimeout(async function(){
-    message.textContent = await assemblyText();
+    await assemblyText();
   },1500)
 }
 
@@ -53,8 +53,8 @@ async function assemblyText(){
      textFin = await fetch(endpoint, {'method':'GET', "headers":headers});
      textFin = await textFin.json();
   }
+  message.textContent = textFin["text"];
   onSTTComplete();
-  return textFin["text"];
 }
 
 
@@ -67,6 +67,18 @@ function onStopRecording(){
 }
 function onSTTComplete(){
   status.textContent = "Status: Complete";
+  updateEmbeds();
+}
+
+function updateEmbeds(){
+  base = "<video autoplay=\"1\" loop=\"true\" src=\"https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/";
+  inner = "";
+  arr = message.textContent.split(" ");
+  for(const element of arr){
+    inner = inner+base+element+".mp4\" title=\"" + element +"\"></video>"
+    console.log(inner);
+  }
+  ASLVideo.innerHTML = inner;
 }
 
 
@@ -74,6 +86,7 @@ const startButt = document.getElementById("startButton");
 const stopButt = document.getElementById("stopButton");
 const message = document.getElementById("message");
 const status = document.getElementById("status");
+const ASLVideo = document.getElementById("ASLVideo");
 
 microphone();
 

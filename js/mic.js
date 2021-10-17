@@ -4,6 +4,7 @@ var mediaRecorder;
 var mic;
 var textFin;
 var txt;
+var ASLMode = 0;
 
 //good functions for organization
 const constrA = {
@@ -57,6 +58,36 @@ async function assemblyText(){
   onSTTComplete();
 }
 
+function updateEmbeds(){
+  base = "<div style=\"float:left;padding:5px;\"> <video  width=\"320\" height=\"240\" autoplay=\"1\" loop=\"true\" src=\""; ;
+  inner = "";
+  arr = message.textContent.split(" ");
+  for(const element of arr){
+    inner = inner+base+getVideoUrl(element)+" title=\"" + element +"\"></video></div>"
+  }
+  ASLVideo.innerHTML = inner;
+}
+
+function getVideoUrl(name){
+  str = name.replace(/[^\w\s]|_/g, "")
+         .replace(/\s+/g, " ").toLowerCase();
+  attempt = "";
+  if(ASLMode == 0){
+      attempt = "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/"+str+".mp4\"";
+  }
+  else if(ASLMode == 1){
+      attempt = "https://media.signbsl.com/videos/asl/aslbricks/mp4/"+str+".mp4\"";
+  }
+  else if(ASLMode == 2){
+      attempt = "https://media.signbsl.com/videos/asl/startasl/mp4/"+str+".mp4\"";
+  }
+  return attempt;
+}
+
+function switchInterpreter(){
+  ASLMode = (ASLMode+1)%3;
+  updateEmbeds();
+}
 
 // A trio of functions. I reccomend you put whatever dynamic UI things you want in these
 function onRecording(){ //activates alongside
@@ -70,20 +101,9 @@ function onSTTComplete(){
   updateEmbeds();
 }
 
-function updateEmbeds(){
-  base = "<video autoplay=\"1\" loop=\"true\" src=\"https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/";
-  inner = "";
-  arr = message.textContent.split(" ");
-  for(const element of arr){
-    inner = inner+base+element+".mp4\" title=\"" + element +"\"></video>"
-    console.log(inner);
-  }
-  ASLVideo.innerHTML = inner;
-}
-
-
 const startButt = document.getElementById("startButton");
 const stopButt = document.getElementById("stopButton");
+const interpreterButton = document.getElementById("ASLmode");
 const message = document.getElementById("message");
 const status = document.getElementById("status");
 const ASLVideo = document.getElementById("ASLVideo");
@@ -92,3 +112,4 @@ microphone();
 
 startButt.onclick = startRec;
 stopButt.onclick = stopRec;
+interpreterButton.onclick = switchInterpreter;

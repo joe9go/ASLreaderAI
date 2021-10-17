@@ -99,6 +99,22 @@ function onStopRecording(){
 }
 function onSTTComplete(){
   status.textContent = "Status: Complete";
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var raw = JSON.stringify({
+    "textdata": "Here is a test"
+  });
+  var requestOptions = {
+    'method': 'POST',
+    'headers': myHeaders,
+    'body': raw,
+    'redirect': 'follow'
+  };
+  emo = await fetch("https://asl-emotion-ai-api.herokuapp.com/predict", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+  message.textContent = message.textContent +" || Emotion detected: "+emo;
   updateEmbeds();
 }
 
